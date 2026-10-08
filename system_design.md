@@ -110,17 +110,11 @@ The database design follows these principles:
 
 ### 3.3.2 Entity Relationship Diagram
 
-The following ER diagram represents the logical database structure of the Digital Health Twin system.
+The Entity Relationship (ER) diagram represents the major entities of the Digital Health Twin system, their attributes, primary keys, foreign keys, and relationships.
 
 ![ER Diagram](doc/diagrams/ER_DIAGRAM.png)
 
-The Patient entity acts as the central entity of the system. Medical records, diagnostic reports, health measurements, and health history are associated with individual patients.
-
-Each patient is associated with a Digital Health Twin. The Digital Health Twin is connected with health analysis, risk assessment, and personalized insight information.
-
-The Data Source entity identifies the origin of health measurements, such as wearable devices, sensors, medical systems, or other supported sources.
-
----
+**Figure 3.1: Entity Relationship Diagram of the Digital Health Twin System**
 
 ### 3.3.3 Main Database Entities
 
@@ -746,3 +740,4 @@ Analysis Results
        |
        v
 Backend Services
+
