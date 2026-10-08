@@ -128,3 +128,46 @@ Digital Health Twin for Personalized Health Monitoring
     ├── 10.5 Project Presentation
     ├── 10.6 Project Demonstration
     └── 10.7 Final Submission
+
+## Progress Review
+
+The project progress is reviewed periodically with the project guide to
+ensure that the planned activities are progressing according to the
+defined schedule.
+
+### Current Progress
+
+| Work Area | Current Status |
+|---|---|
+| Project Planning & Requirements | Completed |
+| Research & Data Preparation | In Progress |
+| System Architecture & Design | In Progress / Partially Completed |
+| Digital Health Twin Development | Planned |
+| AI/ML Development | Planned |
+| Backend Development | Planned |
+| Frontend & Dashboard Development | Planned |
+| System Integration | Planned |
+| Testing & Evaluation | Planned |
+| Documentation & Finalization | In Progress |
+
+### Progress Review Activities
+
+- Review completed activities with the project guide.
+- Compare actual progress with the planned schedule.
+- Identify delayed or pending tasks.
+- Discuss technical issues and implementation challenges.
+- Update the project schedule when required.
+- Record feedback received from the project guide.
+- Prioritize the next development activities.
+
+### Current Phase
+
+The project is currently in the planning and design stage. The major
+architecture, system design, database design, module structure,
+technology direction, project planning, and work breakdown structure
+have been defined.
+
+The next implementation activities include dataset preparation,
+data preprocessing, Digital Health Twin development, AI/ML analysis,
+backend and dashboard implementation, followed by system integration
+and testing.
