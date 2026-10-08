@@ -112,7 +112,7 @@ The database design follows these principles:
 
 The Entity Relationship (ER) diagram represents the major entities of the Digital Health Twin system, their attributes, primary keys, foreign keys, and relationships.
 
-![ER Diagram](doc/diagram/ER_DIAGRAM.png)
+<img src="./doc/diagram/ER_DIAGRAM.png" alt="ER Diagram" width="100%">
 
 **Figure 3.1: Entity Relationship Diagram of the Digital Health Twin System**
 
