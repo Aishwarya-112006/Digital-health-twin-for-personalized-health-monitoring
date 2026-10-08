@@ -1,0 +1,48 @@
+Dataset: DEMO_L.xpt
+Rows: 11933
+Columns: 27
+Duplicate SEQN values: 0
+Missing cells: 99768
+
+Dataset: BMX_L.xpt
+Rows: 8860
+Columns: 22
+Duplicate SEQN values: 0
+Missing cells: 107023
+
+Dataset: BPXO_L.xpt
+Rows: 7801
+Columns: 12
+Duplicate SEQN values: 0
+Missing cells: 2893
+
+Dataset: DIQ_L.xpt
+Rows: 11744
+Columns: 9
+Duplicate SEQN values: 0
+Missing cells: 60768
+
+Dataset: GHB_L.xpt
+Rows: 7199
+Columns: 3
+Duplicate SEQN values: 0
+Missing cells: 484
+
+Dataset: TCHOL_L.xpt
+Rows: 8068
+Columns: 4
+Duplicate SEQN values: 0
+Missing cells: 2356
+
+Dataset: HSQ_L.xpt
+Rows: 6615
+Columns: 2
+Duplicate SEQN values: 0
+Missing cells: 864
+
+INTEGRATED DATASET
+Rows: 11933
+Columns: 73
+Unique participants: 11933
+Duplicate participant IDs: 0
+Missing cells: 412034

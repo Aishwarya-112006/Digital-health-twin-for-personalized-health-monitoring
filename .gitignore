@@ -1,0 +1,7 @@
+# NHANES raw datasets
+
+data/raw/*.xpt
+
+# Merged participant-level health data
+
+data/processed/nhanes_merged.csv
