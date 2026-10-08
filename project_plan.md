@@ -35,10 +35,10 @@ Sensors and monitoring systems
 
 Health history
 
-Public healthcare datasets such as PhysioNet
+Public healthcare datasets such as NHANES
 
-Other structured health-data sources considered during
-implementation
+Other structured health-data sources that may be considered for future
+extensions
 
 The requirements are divided into:
 
@@ -228,17 +228,39 @@ appropriate validation.
 
 The project scope includes:
 
-A. Health Data Collection
+### A. Health Data Collection
 
-Collecting health information from suitable datasets.
+The project uses the National Health and Nutrition Examination Survey
+(NHANES) as the primary public healthcare dataset for development and
+analysis.
 
-Supporting structured health information from medical and
-physiological sources.
+The project uses selected NHANES components relevant to the Digital
+Health Twin rather than the complete NHANES collection.
 
-Using public datasets where appropriate.
+The selected components include:
 
-Considering sources such as PhysioNet and other suitable healthcare
-datasets.
+- DEMO_L — Demographic information
+- BMX_L — Body measurements
+- BPXO_L — Blood pressure measurements
+- DIQ_L — Diabetes-related information
+- GHB_L — Glycohemoglobin / HbA1c information
+- TCHOL_L — Total cholesterol information
+- HSQ_L — General health-status information
+
+These components provide complementary information for constructing an
+integrated patient health profile.
+
+The selected components are combined using the NHANES participant
+identifier (SEQN) wherever applicable.
+
+The complete NHANES collection is not used because it contains a large
+number of variables and datasets that are not required for the current
+project objectives. Selective component usage keeps the data-processing
+pipeline focused, reduces unnecessary preprocessing complexity, and
+limits the computational requirements of the prototype.
+
+Additional healthcare data sources may be integrated in future versions
+of the system.
 
 B. Data Preprocessing
 
@@ -347,6 +369,59 @@ Personalized insights.
 Digital Health Twin status.
 
 Last update information.
+
+### 1.3.1.1 Dataset Selection and Component Justification
+
+The project uses selected components of the National Health and Nutrition
+Examination Survey (NHANES) as the primary dataset for implementation.
+
+NHANES was selected because it provides a broad range of demographic,
+physical examination, laboratory, and health-status information. These
+different categories of information are useful for constructing a
+patient-specific health profile and demonstrating the Digital Health
+Twin workflow.
+
+The project does not use the complete NHANES collection. NHANES contains
+a large number of datasets covering different health-related domains,
+many of which are not required for the current project objectives.
+Therefore, only relevant components were selected.
+
+The selective approach provides the following advantages:
+
+- Reduces unnecessary data processing.
+- Reduces the number of irrelevant variables.
+- Simplifies data cleaning and preprocessing.
+- Reduces computational requirements.
+- Makes feature selection and model development more manageable.
+- Keeps the implementation focused on the project's health-monitoring
+  objectives.
+
+The selected components are:
+
+| Component | Purpose |
+|---|---|
+| DEMO_L | Provides demographic information and the participant identifier used to construct the basic patient profile. |
+| BMX_L | Provides body measurements such as height, weight, and related physical measurements. |
+| BPXO_L | Provides blood pressure measurements for health monitoring and analysis. |
+| DIQ_L | Provides diabetes-related information and health history variables. |
+| GHB_L | Provides glycohemoglobin/HbA1c measurements for glucose-related health analysis. |
+| TCHOL_L | Provides total cholesterol measurements for the laboratory health profile. |
+| HSQ_L | Provides general health-status information that contributes to the overall patient profile. |
+
+The NHANES participant identifier, SEQN, is used to associate records
+from the selected components belonging to the same participant.
+
+The integrated data is subsequently passed through the preprocessing
+pipeline. The cleaned information is used to construct the patient
+health profile and Digital Health Twin and to support subsequent health
+analysis, pattern identification, risk indicators, and personalized
+insights.
+
+The selected NHANES data represents collected survey, examination, and
+laboratory information rather than a real-time wearable or sensor
+stream. Therefore, the project demonstrates the Digital Twin update
+mechanism by processing newly available health information and updating
+the corresponding patient representation.
 
 1.3.2 Out-of-Scope Features
 
@@ -838,62 +913,37 @@ Testing & Evaluation
      ↓
 Documentation & Demonstration
 
-1.6.3 Proposed Technology Direction
+### Dataset Selection
 
-The exact technology stack may be finalized according to implementation
-requirements.
+The project uses the National Health and Nutrition Examination Survey
+(NHANES) as the primary public healthcare dataset for implementation.
 
-Programming and Data Processing
+The selected NHANES components are:
 
-Python
+- DEMO_L
+- BMX_L
+- BPXO_L
+- DIQ_L
+- GHB_L
+- TCHOL_L
+- HSQ_L
 
-Pandas
+These components were selected based on their relevance to patient
+profiling, physical health measurements, blood pressure monitoring,
+diabetes-related information, glucose-related measurements, cholesterol
+analysis, and general health status.
 
-NumPy
+The selected datasets are stored in the project's `data/raw/` directory
+and will remain unchanged as the original raw data.
 
-Machine Learning
+The datasets will be cleaned, validated, transformed, and integrated
+during the preprocessing stage. The resulting processed data will be
+stored separately in the `data/processed/` directory.
 
-Scikit-learn
-
-Other suitable ML libraries if required by the selected model
-
-Frontend
-
-React.js
-
-HTML
-
-CSS
-
-JavaScript
-
-Backend
-
-Python-based API framework, such as FastAPI, if selected during
-implementation
-
-Database
-
-A suitable database system based on the final data model and
-implementation requirements
-
-Visualization
-
-Suitable charting/visualization library
-
-Development and Version Control
-
-VS Code
-
-Git
-
-GitHub
-
-Dataset Direction
-
-Public healthcare datasets such as PhysioNet may be considered. The
-final dataset must be selected based on availability, relevance, data
-structure, project scope, and licensing/access requirements.
+NHANES is used as the current implementation dataset. Additional
+healthcare data sources may be considered in future versions to support
+broader integration with wearable devices, sensors, medical systems, or
+other healthcare datasets.
 
 1.6.4 Project Milestones
 

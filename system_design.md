@@ -707,6 +707,31 @@ The final choice of specific frameworks or database technologies may be refined 
 | Development Environment | VS Code | Development and project management |
 
 ---
+### 3.7.2.1 Dataset Selection and Data Components
+
+The project uses selected components of the National Health and Nutrition Examination Survey (NHANES) as the primary health-data source for development and analysis.
+
+NHANES was selected because it provides a broad range of demographic, physical examination, laboratory, and health-related information that can be combined to construct a patient-level health profile. This makes it suitable for demonstrating the proposed Digital Health Twin workflow, including patient profiling, health measurement analysis, risk identification, and personalized health insights.
+
+The complete NHANES collection contains a large number of datasets covering different aspects of health. Instead of using the complete collection, the project uses only the components relevant to the objectives of the Digital Health Twin. Selective data usage reduces unnecessary variables, simplifies preprocessing, reduces computational requirements, and keeps the analysis focused on the health parameters required by the proposed system.
+
+The selected NHANES components are:
+
+| NHANES Component | Purpose in the Project |
+|---|---|
+| DEMO_L | Provides demographic information used to establish the basic patient profile, including participant identification and demographic characteristics. |
+| BMX_L | Provides body measurement information such as height, weight, and body measurements used for physical health profiling. |
+| BPXO_L | Provides blood pressure measurements used for cardiovascular-related health monitoring and analysis. |
+| DIQ_L | Provides diabetes-related information used to understand diabetes status and related health history. |
+| GHB_L | Provides glycohemoglobin/HbA1c information that can be used for glucose-related health analysis. |
+| TCHOL_L | Provides total cholesterol measurements used as part of the patient's laboratory health profile. |
+| HSQ_L | Provides general health-status information that contributes to the overall patient health profile. |
+
+The selected components are combined using the NHANES participant identifier (`SEQN`) wherever applicable. This allows information from different NHANES components to be associated with the corresponding participant and subsequently used to construct an integrated patient health profile.
+
+The resulting integrated dataset forms the input to the preprocessing pipeline. After preprocessing, the relevant health attributes are used to construct the patient representation and Digital Health Twin, followed by health analysis, risk/pattern identification, and personalized health insights.
+
+The use of NHANES in this project is intended for research and prototype development. The dataset represents collected health survey and examination information and does not itself constitute a real-time continuous monitoring stream. The project's Digital Health Twin update mechanism will therefore demonstrate how newly available processed health information can be incorporated into an existing patient profile.
 
 ### 3.7.3 Python
 
