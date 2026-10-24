@@ -5,3 +5,21 @@ data/raw/*.xpt
 # Merged participant-level health data
 
 data/processed/nhanes_merged.csv
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Node.js dependencies and build output
+node_modules/
+dist/
+
+# Logs
+*.log
