@@ -1,4 +1,9 @@
+import DiabetesAssessment from "./DiabetesAssessment";
+import Auth from "./Auth";
+import { supabase } from "./supabaseClient";
+
 import { useEffect, useState } from "react";
+
 import {
   Activity,
   ArrowDownRight,
@@ -10,21 +15,13 @@ import {
   ShieldCheck,
   UserRound,
   X,
-  Eye,
-  EyeOff,
-  LockKeyhole,
-  ArrowRight,
   LogOut,
 } from "lucide-react";
+
 import "./App.css";
 
 const API_BASE =
   import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
-
-const SESSION_KEY = "swasthya-demo-session";
-
-const DEMO_USERNAME = "demo";
-const DEMO_PASSWORD = "HealthDemo@123";
 
 const METRICS = [
   { key: "BMXBMI", label: "Body mass index", unit: "kg/m²" },
@@ -45,14 +42,11 @@ function displayValue(value, unit = "") {
 }
 
 function App() {
-  // Authentication state
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    () => sessionStorage.getItem(SESSION_KEY) === "active"
-  );
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [loginError, setLoginError] = useState("");
+  // Supabase authentication state
+  const [session, setSession] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  const isLoggedIn = !!session;
 
   // Dashboard state
   const [apiStatus, setApiStatus] = useState("checking");
@@ -64,36 +58,56 @@ function App() {
   const [search, setSearch] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Demo login
-  function handleLogin(event) {
-    event.preventDefault();
+  // Check and monitor the user's Supabase session
+  useEffect(() => {
+    let mounted = true;
 
-    const enteredUsername = username.trim();
+    async function checkSession() {
+      const { data, error } = await supabase.auth.getSession();
 
-    if (
-      enteredUsername === DEMO_USERNAME &&
-      password === DEMO_PASSWORD
-    ) {
-      sessionStorage.setItem(SESSION_KEY, "active");
-      setLoginError("");
-      setIsLoggedIn(true);
-      setUsername("");
-      setPassword("");
-    } else {
-      setLoginError(
-        "Invalid credentials. Please check the username and password."
-      );
+      if (error) {
+        console.error("Session error:", error.message);
+      }
+
+      if (mounted) {
+        setSession(data?.session ?? null);
+        setAuthLoading(false);
+      }
     }
-  }
 
-  // Logout
-  function handleLogout() {
-    sessionStorage.removeItem(SESSION_KEY);
-    setIsLoggedIn(false);
-    setUsername("");
-    setPassword("");
-    setLoginError("");
+    checkSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, currentSession) => {
+      if (mounted) {
+        setSession(currentSession);
+        setAuthLoading(false);
+      }
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  // Supabase logout
+  async function handleLogout() {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error("Logout failed:", error.message);
+      setError("Could not log out. Please try again.");
+      return;
+    }
+
     setMobileMenuOpen(false);
+    setProfile(null);
+    setParticipants([]);
+    setSelectedId("");
+    setSearch("");
+    setError("");
   }
 
   // API helper
@@ -179,7 +193,7 @@ function App() {
 
     async function initialize() {
       try {
-        await fetchJson(`${API_BASE}/api/health`);
+        await fetchJson(`${API_BASE}/`);
 
         if (!cancelled) {
           setApiStatus("connected");
@@ -225,7 +239,18 @@ function App() {
 
   const missingCount = METRICS.length - availableMetrics.length;
 
-  // LOGIN PAGE
+  // Show a loading screen while checking the Supabase session
+  if (authLoading) {
+    return (
+      <main className="login-page">
+        <div className="login-form-container">
+          <p className="state-message">Checking your session...</p>
+        </div>
+      </main>
+    );
+  }
+
+  // Login and registration page
   if (!isLoggedIn) {
     return (
       <main className="login-page">
@@ -295,137 +320,12 @@ function App() {
               <span>SwasthyaDrishti</span>
             </div>
 
-            <div className="login-heading">
-              <span className="login-heading-icon">
-                <LockKeyhole size={21} />
-              </span>
-
-              <p className="eyebrow">WELCOME BACK</p>
-
-              <h2>Sign in to continue.</h2>
-
-              <p>
-                Enter the demo credentials to explore the health
-                dashboard.
-              </p>
-            </div>
-
-            <form
-              className="demo-login-form"
-              onSubmit={handleLogin}
-            >
-              <div className="login-field">
-                <label htmlFor="login-username">Username</label>
-
-                <div className="login-input-wrap">
-                  <UserRound size={18} />
-
-                  <input
-                    id="login-username"
-                    name="username"
-                    type="text"
-                    placeholder="Enter your username"
-                    value={username}
-                    onChange={(event) =>
-                      setUsername(event.target.value)
-                    }
-                    autoComplete="username"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="login-field">
-                <label htmlFor="login-password">Password</label>
-
-                <div className="login-input-wrap">
-                  <LockKeyhole size={18} />
-
-                  <input
-                    id="login-password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(event) =>
-                      setPassword(event.target.value)
-                    }
-                    autoComplete="current-password"
-                    required
-                  />
-
-                  <button
-                    className="password-toggle"
-                    type="button"
-                    onClick={() =>
-                      setShowPassword((current) => !current)
-                    }
-                    aria-label={
-                      showPassword ? "Hide password" : "Show password"
-                    }
-                  >
-                    {showPassword ? (
-                      <EyeOff size={18} />
-                    ) : (
-                      <Eye size={18} />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {loginError && (
-                <div className="login-error" role="alert">
-                  <ShieldCheck size={17} />
-                  <span>{loginError}</span>
-                </div>
-              )}
-
-              <button
-                className="login-submit-button"
-                type="submit"
-              >
-                Sign in to dashboard
-                <ArrowRight size={18} />
-              </button>
-            </form>
-
-            <div className="demo-credentials">
-              <div className="demo-credentials-heading">
-                <ShieldCheck size={17} />
-                <strong>Demo access</strong>
-              </div>
-
-              <p>Use these credentials to access the prototype.</p>
-
-              <div className="demo-credential-row">
-                <span>Username</span>
-                <code>demo</code>
-                <button
-                  type="button"
-                  onClick={() => setUsername("demo")}
-                  aria-label="Fill demo username"
-                >
-                  Use
-                </button>
-              </div>
-
-              <div className="demo-credential-row">
-                <span>Password</span>
-                <code>HealthDemo@123</code>
-                <button
-                  type="button"
-                  onClick={() => setPassword("HealthDemo@123")}
-                  aria-label="Fill demo password"
-                >
-                  Use
-                </button>
-              </div>
-            </div>
-
-            <p className="login-disclaimer">
-              This is a frontend-only demonstration login. It is
-              not a production authentication system.
-            </p>
+            <Auth
+              onLogin={() => {
+                // Supabase session listener updates the session.
+                // This callback is retained for the Auth component.
+              }}
+            />
           </div>
         </section>
       </main>
@@ -477,6 +377,13 @@ function App() {
           </a>
 
           <a
+            href="#assessment"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Personal assessment
+          </a>
+
+          <a
             href="#insights"
             onClick={() => setMobileMenuOpen(false)}
           >
@@ -496,7 +403,9 @@ function App() {
             <UserRound size={17} />
           </span>
 
-          <span className="dashboard-user-label">Demo user</span>
+          <span className="dashboard-user-label">
+            {session?.user?.email || "User"}
+          </span>
 
           <button
             className="logout-button"
@@ -794,6 +703,9 @@ function App() {
             </p>
           )}
         </section>
+
+        {/* PERSONAL HEALTH ASSESSMENT */}
+        <DiabetesAssessment apiBase={API_BASE} />
 
         <section
           className="insights-section section-frame"
