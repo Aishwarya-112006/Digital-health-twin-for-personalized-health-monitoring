@@ -15,12 +15,14 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "https://frontend-4mtmidlkl-git-happens1.vercel.app",
         "https://frontend-dbgkntxs7-git-happens1.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # Register API routes.
 app.include_router(health.router, prefix="/api", tags=["Health"])
